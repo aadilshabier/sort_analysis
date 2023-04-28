@@ -23,8 +23,8 @@ int main() {
 
 	DataGenerators datagens = {
 		{"rand", new RandomGen(gen)},
-		{"inc", new IncGen()},
-		{"dec", new DecGen()},
+		{"inc", new IncGen(gen)},
+		{"dec", new DecGen(gen)},
 	};
 
 	std::vector<size_t> sizes = {1000, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000};
