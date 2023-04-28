@@ -50,13 +50,17 @@ void QuickSorter2::sort(std::vector<int>& a)
 
 static int median_index(std::vector<int>& a, int i, int j, int k)
 {
-	if (a[i] < a[j] && a[j] < a[k]) {
-		return j;
-	} else if (a[j] < a[k] && a[k] < a[i]) {
-		return k;
-	} else {
-		return i;
-	}
+	int r;
+	int s[] = {a[i], a[j], a[k]};
+	std::sort(s, s+3);
+	int m = s[1];
+	if (m == a[i])
+		r = i;
+	else if (m == a[j])
+		r = j;
+	else
+		r = k;
+	return r;
 }
 
 void QuickSorter3::sort_rec(std::vector<int>& a, int l, int h)
