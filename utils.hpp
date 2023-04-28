@@ -25,4 +25,4 @@ public:
 
 void print_vector(const vector<int>& a);
 
-bool is_sorted(const vector<int>& a);
+double average(const vector<double>& a);

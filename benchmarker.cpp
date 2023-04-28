@@ -1,5 +1,6 @@
 #include "benchmarker.hpp"
 
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 
@@ -23,25 +24,25 @@ void Benchmarker::run(const SorterList& sorters, const DataGenerators& datagens,
 	setup(sorters, datagens, sizes);
 	StopWatch sw;
 	std::vector<int> data;
+	std::vector<double> times(n);
 	for (const auto& [datagen_name, datagen] : datagens) {
 		for (const auto& size : sizes) {
 			datagen->generate(data, size);
 			for (const auto& [sorter_name, sorter] : sorters) {
 				// sort n times and take average to get better results
-				double t_total = 0.0;
 				for (size_t i=0; i<n; i++) {
 					// std::cout << "Starting " << sorter_name << ", " << datagen_name << " with size: " << size << ", iteration: " << i <<  '\n';
 					auto data_copy{data}; // create a copy of the data and sort it
 					sw.reset();
 					sorter->sort(data_copy);
-					t_total += sw.elapsed_ms();
-					if (!is_sorted(data_copy)) {
+					times[i] = sw.elapsed_ms();
+					if (!std::is_sorted(data_copy.begin(), data_copy.end())) {
 						print_vector(data_copy);
 						std::cerr << "ERROR: " << sorter_name << " could not sort " << datagen_name << " data!" << std::endl;
 						return;
 					}
 				}
-				auto t = t_total / double{n};
+				auto t = average(times);
 				std::cout << sorter_name << " sorted " << datagen_name << '(' << size << ") in " << t << "ms." << std::endl;
 				results[datagen_name][sorter_name].push_back(t);
 			}
